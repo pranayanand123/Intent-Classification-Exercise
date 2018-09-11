@@ -51,10 +51,16 @@ count_vect = CountVectorizer()
 X_train_counts = count_vect.fit_transform(data['Question'])
 tfidf_transformer = TfidfTransformer()
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-clf = LinearSVC().fit(X_train_tfidf, data['Cat2'])
+clf1 = LinearSVC().fit(X_train_tfidf, data['Cat2'])
 X_test = pandas.read_excel('Exercise.xlsx').iloc[:,0]
 
-print(clf.predict(count_vect.transform(X_test)))
+print(clf1.predict(count_vect.transform(X_test)))
+
+clf2 = LinearSVC().fit(X_train_tfidf, data['Cat1'])
+print(clf2.predict(count_vect.transform(X_test)))
+
+clf3 = LinearSVC().fit(X_train_tfidf, data['Cat3'])
+print(clf3.predict(count_vect.transform(X_test)))
 
 
 
