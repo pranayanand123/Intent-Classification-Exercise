@@ -107,8 +107,8 @@ tfidf_transformer_final = TfidfTransformer()
 X_train_tfidf_final = tfidf_transformer_final.fit_transform(X_train_counts_final)
 final_classifier = LinearSVC().fit(X_train_tfidf_final, frame2.iloc[:,0])
 
-selected_rows = frame.loc[(frame['Cat1'] == some_value) & frame['other_column'].isin(some_values)]
+selected_rows = frame.loc[(frame['Cat1'] == 'simple') & (frame['Cat2']=='attribute') & (frame['Cat3'] == 'single')]
 
-
+final_result  = final_classifier.predict(count_vect_final.transform(selected_rows['Question']))
 
 
