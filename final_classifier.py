@@ -31,3 +31,4 @@ for i in li:
     a,b = i.split("-")
     listab.append([a,b])
 frame2 = pandas.DataFrame(listab)
+

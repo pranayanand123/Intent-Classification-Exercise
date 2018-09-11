@@ -58,20 +58,56 @@ clf2 = LinearSVC().fit(X_train_tfidf, data['Cat2'])
 X_test = pandas.read_excel('Exercise.xlsx').iloc[:,0]
 
 cat2 = clf2.predict(count_vect.transform(X_test))
-cat2 = pandas.Series(cat2)
+cat2 = pandas.Series(cat2,name='Cat2')
 
 clf1 = LinearSVC().fit(X_train_tfidf, data['Cat1'])
 cat1 = clf1.predict(count_vect.transform(X_test))
-cat1 = pandas.Series(cat1)
+cat1 = pandas.Series(cat1,name='Cat1')
 
 clf3 = LinearSVC().fit(X_train_tfidf, data['Cat3'])
 cat3 = clf3.predict(count_vect.transform(X_test))
-cat3 = pandas.Series(cat3)
+cat3 = pandas.Series(cat3,name='Cat3')
 frame = pandas.concat([X_test,pandas.read_excel('Exercise.xlsx').iloc[:,1],cat1,cat2,cat3], axis=1)
 
 writer2 = ExcelWriter('Exercise_Results.xlsx')
 frame.to_excel(writer2,'Exercise_Results',index = False)
 writer2.save()
+
+#FINAL CLASSIFIER
+
+stri = '''accessoryif - Does it come with a scoop?
+amountget - What about sugar content?
+certificateif - is this product certified gluten free?
+colorif - Is the Vanilla protein powder white?
+containget - What kind of pea used for protein?
+containif - Is this product made with Sustainable palm oil?
+dayservingget - How many days supply is in the large tub?
+describeget - How is this vegan if dairy is listen on the ingredients?
+expiryget - Where can i find the expiration date ?
+numservingget - How many total servings is included in the 30.8 oz tub?
+packageif - Is the seal supposed to have 5 holes?
+packagesizeget - do they make a bigger container ?
+placeget - Where is this manufactured?
+placeif - is the product made in the usa?
+safeforif - Is this safe for pregnant women?
+servingamountget - What typical measurement equals 1 scoop?
+storagedurationget - How long will this keep if stored correctly? Thanks!
+storagemethodif - Do i need to keep vegaone in freeze?'''
+li = stri.split("\n")
+
+listab= []
+for i in li:
+    a,b = i.split("-")
+    listab.append([a,b])
+frame2 = pandas.DataFrame(listab)
+
+count_vect_final = CountVectorizer()
+X_train_counts_final = count_vect_final.fit_transform(frame2.iloc[:,1])
+tfidf_transformer_final = TfidfTransformer()
+X_train_tfidf_final = tfidf_transformer_final.fit_transform(X_train_counts_final)
+final_classifier = LinearSVC().fit(X_train_tfidf_final, frame2.iloc[:,0])
+
+selected_rows = frame.loc[(frame['Cat1'] == some_value) & frame['other_column'].isin(some_values)]
 
 
 
