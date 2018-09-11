@@ -12,6 +12,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.svm import LinearSVC
 
 data = pandas.read_excel('sample.xlsx')
 
@@ -50,10 +51,10 @@ count_vect = CountVectorizer()
 X_train_counts = count_vect.fit_transform(data['Question'])
 tfidf_transformer = TfidfTransformer()
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-clf = MultinomialNB().fit(X_train_tfidf, data['Cat2'])
+clf = LinearSVC().fit(X_train_tfidf, data['Cat2'])
 X_test = pandas.read_excel('Exercise.xlsx').iloc[:,0]
 
-print(clf.predict(count_vect.transform(["Why price is so high?"])))
+print(clf.predict(count_vect.transform(X_test)))
 
 
 
