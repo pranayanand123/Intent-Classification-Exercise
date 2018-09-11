@@ -13,6 +13,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.svm import LinearSVC
+from pandas import ExcelWriter
+
+
 
 data = pandas.read_excel('sample.xlsx')
 
@@ -64,8 +67,11 @@ cat1 = pandas.Series(cat1)
 clf3 = LinearSVC().fit(X_train_tfidf, data['Cat3'])
 cat3 = clf3.predict(count_vect.transform(X_test))
 cat3 = pandas.Series(cat3)
+frame = pandas.concat([X_test,pandas.read_excel('Exercise.xlsx').iloc[:,1],cat1,cat2,cat3], axis=1)
 
-
+writer2 = ExcelWriter('Exercise_Results.xlsx')
+frame.to_excel(writer2,'Exercise_Results',index = False)
+writer2.save()
 
 
 
