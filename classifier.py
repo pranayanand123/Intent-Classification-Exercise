@@ -11,9 +11,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfTransformer
 
 data = pandas.read_excel('sample.xlsx')
-Exercise = pandas.read_excel('Exercise.xlsx')
+
+'''Exercise = pandas.read_excel('Exercise.xlsx')
 X_Exercise = Exercise.iloc[:,0]
 X_Exercise= X_Exercise.str.replace('[^\w\s]','')
 
@@ -42,7 +44,16 @@ Y_Exercise = Y_Exercise.apply(lambda x: 'complex' if x==0 else 'simple')
 writer = pandas.ExcelWriter('Exercise.xlsx', engine='openpyxl')
 Exercise.to_excel(writer, startcol=0,index=False)
 Y_Exercise.to_excel(writer, startcol=1,index=False)
-writer.save()
+writer.save()'''
+
+count_vect = CountVectorizer()
+X_train_counts = count_vect.fit_transform(data['Question'])
+tfidf_transformer = TfidfTransformer()
+X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
+clf = MultinomialNB().fit(X_train_tfidf, data['Cat2'])
+X_test = pandas.read_excel('Exercise.xlsx').iloc[:,0]
+
+print(clf.predict(count_vect.transform(["Why price is so high?"])))
 
 
 
