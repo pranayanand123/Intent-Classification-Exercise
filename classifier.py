@@ -69,9 +69,7 @@ cat3 = clf3.predict(count_vect.transform(X_test))
 cat3 = pandas.Series(cat3,name='Cat3')
 frame = pandas.concat([X_test,pandas.read_excel('Exercise.xlsx').iloc[:,1],cat1,cat2,cat3], axis=1)
 
-writer2 = ExcelWriter('Exercise_Results.xlsx')
-frame.to_excel(writer2,'Exercise_Results',index = False)
-writer2.save()
+
 
 #FINAL CLASSIFIER
 
@@ -110,5 +108,11 @@ final_classifier = LinearSVC().fit(X_train_tfidf_final, frame2.iloc[:,0])
 selected_rows = frame.loc[(frame['Cat1'] == 'simple') & (frame['Cat2']=='attribute') & (frame['Cat3'] == 'single')]
 
 final_result  = final_classifier.predict(count_vect_final.transform(selected_rows['Question']))
+final_result = pandas.Series(final_result, index = selected_rows.index, name = 'Cat4')
 
+final_frame = pandas.concat([frame, final_result], axis=1)
+
+writer2 = ExcelWriter('Exercise_Results.xlsx')
+final_frame.to_excel(writer2,'Exercise_Results',index = False)
+writer2.save()
 
